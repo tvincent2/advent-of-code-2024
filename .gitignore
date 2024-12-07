@@ -1,0 +1,4 @@
+target/
+day-00/
+input/
+Cargo.lock
