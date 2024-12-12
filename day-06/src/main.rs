@@ -74,7 +74,7 @@ impl LabMap {
         }
         visited_positions.sort();
         visited_positions.dedup();
-        let count = visited_positions.iter().count();
+        let count = visited_positions.len();
         (count, visited_positions)
     }
 
@@ -117,9 +117,8 @@ impl From<&str> for LabMap {
     fn from(input: &str) -> Self {
         let height = input.lines().fold(0, |acc, _| acc + 1);
         let width = input.lines().next().unwrap().len();
-        let obstacles = input.lines().enumerate().map(|(line_index, line)| 
-            line.char_indices().filter(|(_, c)| c == &'#').map(move |(char_index, _)| Position { x: char_index, y: line_index })
-        ).flatten().collect::<Vec<Position>>();
+        let obstacles = input.lines().enumerate().flat_map(|(line_index, line)| 
+            line.char_indices().filter(|(_, c)| c == &'#').map(move |(char_index, _)| Position { x: char_index, y: line_index })).collect::<Vec<Position>>();
         let (mut char_index, mut line_index) = (0, 0);
         for (l_index,line) in input.lines().enumerate() {
             match line.find('^') {

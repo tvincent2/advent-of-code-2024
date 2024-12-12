@@ -6,7 +6,7 @@ struct Arrangement {
 
 impl Arrangement {
     fn blink(&mut self) {
-        self.stones = self.stones.iter().map(|stone| transform(*stone)).flatten().collect();
+        self.stones = self.stones.iter().flat_map(|stone| transform(*stone)).collect();
     }
 
     fn blink_25_times_and_count(&mut self) -> usize {
@@ -57,7 +57,7 @@ fn transform(stone: u64) -> Vec<u64> {
 
 fn transform_5_times(stone: u64) -> Vec<u64> {
     let mut result = vec![stone];
-    (0..5).for_each(|_| result = result.iter().map(|stone| transform(*stone)).flatten().collect());
+    (0..5).for_each(|_| result = result.iter().flat_map(|stone| transform(*stone)).collect());
     result
 }
 
@@ -67,7 +67,7 @@ fn transform_50_times_and_count(stone: u64, cache_5: &mut HashMap<u64, Vec<u64>>
     } else {
         let mut stones = vec![stone];
         (0..5).for_each(|_| {
-            stones = stones.iter().map(|stone| {
+            stones = stones.iter().flat_map(|stone| {
                 if let Some(stones) = cache_5.get(stone) {
                     stones.clone()
                 } else {
@@ -75,7 +75,7 @@ fn transform_50_times_and_count(stone: u64, cache_5: &mut HashMap<u64, Vec<u64>>
                     cache_5.insert(*stone, stones.clone());
                     stones
                 }
-            }).flatten().collect();
+            }).collect();
         });
         cache_25.insert(stone, stones.clone());
         stones
@@ -87,7 +87,7 @@ fn transform_50_times_and_count(stone: u64, cache_5: &mut HashMap<u64, Vec<u64>>
             } else {
                 let mut stones = vec![stone];
                 (0..5).for_each(|_| {
-                    stones = stones.iter().map(|stone| {
+                    stones = stones.iter().flat_map(|stone| {
                         if let Some(stones) = cache_5.get(stone) {
                             stones.clone()
                         } else {
@@ -95,7 +95,7 @@ fn transform_50_times_and_count(stone: u64, cache_5: &mut HashMap<u64, Vec<u64>>
                             cache_5.insert(*stone, stones.clone());
                             stones
                         }
-                    }).flatten().collect();
+                    }).collect();
                 });
                 cache_25.insert(stone, stones.clone());
                 stones.len()

@@ -79,7 +79,7 @@ impl Equations {
 
 impl From<&str> for Equations {
     fn from(input: &str) -> Self {
-        let equations = input.lines().map(|line| Equation::from(line)).collect();
+        let equations = input.lines().map(Equation::from).collect();
         Self { equations }
     }
 }

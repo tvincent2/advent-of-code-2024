@@ -7,7 +7,7 @@ fn process_multiplication_candidate(input: String) -> (u64, String) {
         if let Some(mul_index) = input.find("mul(") {
             if mul_index < comma_index {
                 let next_input = input[mul_index..].to_string();
-                println!("failed to find a multiplication end at {}", input[0..comma_index].to_string());
+                println!("failed to find a multiplication end at {}", &input[0..comma_index]);
                 return (0, next_input);
             }
         }
@@ -15,7 +15,7 @@ fn process_multiplication_candidate(input: String) -> (u64, String) {
         let factor1 = match input[0..comma_index].parse::<u64>() {
             Ok(number) => number,
             Err(_) => {
-                println!("failed to find a first factor at {}", input[0..comma_index].to_string());
+                println!("failed to find a first factor at {}", &input[0..comma_index]);
                 return (0, forward_input);
             },
         };
@@ -23,7 +23,7 @@ fn process_multiplication_candidate(input: String) -> (u64, String) {
             if let Some(mul_index) = forward_input.find("mul(") {
                 if mul_index < par_index {
                     let next_input = forward_input[mul_index..].to_string();
-                    println!("failed to find a multiplication end at {}", forward_input[0..par_index].to_string());
+                    println!("failed to find a multiplication end at {}", &forward_input[0..par_index]);
                     return (0, next_input);
                 }
             }
@@ -31,7 +31,7 @@ fn process_multiplication_candidate(input: String) -> (u64, String) {
             let factor2 = match forward_input[0..par_index].parse::<u64>() {
                 Ok(number) => number,
                 Err(_) => {
-                    println!("failed to find a second factor at {}", forward_input[0..par_index].to_string());
+                    println!("failed to find a second factor at {}", &forward_input[0..par_index]);
                     return (0, forward_input2);
                 },
             };

@@ -12,7 +12,7 @@ impl Instructions {
     }
 
     fn sum_fixed_invalid_pages_numbers(&self) -> u32 {
-        let mut invalid_pages: Vec<Pages> = self.pages.iter().filter(|pages| !pages.is_valid(&self.forbidden_after)).map(|pages| pages.clone()).collect();
+        let mut invalid_pages: Vec<Pages> = self.pages.iter().filter(|pages| !pages.is_valid(&self.forbidden_after)).cloned().collect();
 
         invalid_pages.iter_mut().map(|pages| {
             pages.pages.sort_by(|a, b| {
@@ -41,7 +41,7 @@ impl From<&str> for Instructions {
             forbidden_after.entry(numbers[1]).and_modify(|rule| rule.push(numbers[0])).or_insert(vec![numbers[0]]);
         });
 
-        let pages = lines.map(|line| Pages::from(line)).collect();
+        let pages = lines.map(Pages::from).collect();
         Self { forbidden_after, pages }
     }
 }
@@ -60,14 +60,12 @@ impl Pages {
                 // println!("current number is {page}");
                 // println!("current interdictions are {:?}", forbidden_pages);
                 return false;
-            } else {
-                if let Some(forbidden) = forbidden_after.get(&page) {
-                    forbidden.iter().for_each(|f| forbidden_pages.push(f));
-                }
+            } else if let Some(forbidden) = forbidden_after.get(page) {
+                forbidden.iter().for_each(|f| forbidden_pages.push(f));
             }
         }
         // println!("{:?} is valid", self.pages);
-        return true;
+        true
     }
 
     fn middle_page_number(&self) -> u32 {

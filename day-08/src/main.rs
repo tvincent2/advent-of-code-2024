@@ -21,7 +21,7 @@ impl AntennaMap {
         range.extend('a'..='z');
         range.extend('A'..='Z');
 
-        let mut antinodes = range.iter().map(|c| self.antinodes_for_frequency(*c)).flatten().filter(|antinode| self.is_valid_antinode(antinode)).collect::<Vec<_>>();
+        let mut antinodes = range.iter().flat_map(|c| self.antinodes_for_frequency(*c)).filter(|antinode| self.is_valid_antinode(antinode)).collect::<Vec<_>>();
         antinodes.sort();
         antinodes.dedup();
         antinodes.len()
@@ -52,7 +52,7 @@ impl AntennaMap {
         range.extend('a'..='z');
         range.extend('A'..='Z');
 
-        let mut antinodes = range.iter().map(|c| self.antinodes_for_frequency_with_harmonics(*c)).flatten().collect::<Vec<_>>();
+        let mut antinodes = range.iter().flat_map(|c| self.antinodes_for_frequency_with_harmonics(*c)).collect::<Vec<_>>();
         antinodes.sort();
         antinodes.dedup();
         antinodes.len()
@@ -93,9 +93,9 @@ impl From<&str> for AntennaMap {
     fn from(input: &str) -> Self {
         let height = input.lines().fold(0, |acc, _| acc + 1);
         let width = input.lines().next().unwrap().len() as i32;
-        let cells = input.lines().enumerate().map(|(y, line)| {
+        let cells = input.lines().enumerate().flat_map(|(y, line)| {
             line.char_indices().filter(|(_, c)| c != &'.').map(|(x, c)| Antenna{position:Position{x: x as i32, y: y as i32}, frequency: c}).collect::<Vec<Antenna>>()
-        }).flatten().collect();
+        }).collect();
         Self{ height, width, antennas: cells }
     }
 }

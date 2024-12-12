@@ -123,12 +123,12 @@ impl From<&str> for FileSystem {
     fn from(input: &str) -> Self {
         let mut index = 0;
         let mut full = true;
-        let layout = input.chars().map(|c| {
+        let layout = input.chars().flat_map(|c| {
             let size = c.to_digit(10).unwrap() as usize;
             let space = if full { let state = State::Full(index); index += 1; state } else { State::Empty };
             full = !full;
             vec![space; size]
-        }).flatten().collect();
+        }).collect();
         Self { layout }
     }
 }
