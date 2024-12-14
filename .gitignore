@@ -2,3 +2,4 @@ target/
 day-00/
 input/
 Cargo.lock
+day-14/images/*.png
